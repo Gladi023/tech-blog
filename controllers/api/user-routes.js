@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const { User, Post, Comment, Vote } = require('../../models');
+const { restore } = require("../../models/User");
 
-// get all users
+// for the user to sign up 
 router.get('/', (req, res) => {
   User.findAll({
     attributes: { exclude: ['password'] }
@@ -42,7 +43,7 @@ router.get('/:id', (req, res) => {
   })
     .then(dbUserData => {
       if (!dbUserData) {
-        res.status(404).json({ message: 'No user found with this id' });
+        res.status(404).json({ message: 'Wrong id' });
         return;
       }
       res.json(dbUserData);
@@ -83,14 +84,14 @@ router.post('/login', (req, res) => {
     }
   }).then(dbUserData => {
     if (!dbUserData) {
-      res.status(400).json({ message: 'No user with that email address!' });
+      res.status(400).json({ message: 'Wrong email address!' });
       return;
     }
 
     const validPassword = dbUserData.checkPassword(req.body.password);
 
     if (!validPassword) {
-      res.status(400).json({ message: 'Incorrect password!' });
+      res.status(400).json({ message: 'Wrong password!' });
       return;
     }
 
@@ -99,7 +100,7 @@ router.post('/login', (req, res) => {
       req.session.username = dbUserData.username;
       req.session.loggedIn = true;
   
-      res.json({ user: dbUserData, message: 'You are now logged in!' });
+      res.json({ user: dbUserData, message: 'You are logged in!' });
     });
   });
 });
@@ -127,7 +128,7 @@ router.put('/:id', (req, res) => {
   })
     .then(dbUserData => {
       if (!dbUserData) {
-        res.status(404).json({ message: 'No user found with this id' });
+        res.status(404).json({ message: 'No user found' });
         return;
       }
       res.json(dbUserData);
@@ -143,10 +144,11 @@ router.delete('/:id', (req, res) => {
     where: {
       id: req.params.id
     }
+    
   })
     .then(dbUserData => {
       if (!dbUserData) {
-        res.status(404).json({ message: 'No user found with this id' });
+        res.status(404).json({ message: 'No user found' });
         return;
       }
       res.json(dbUserData);

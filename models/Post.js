@@ -52,6 +52,7 @@ Post.init(
       validate: {
         isURL: true
       }
+      // user id informatio fior log in
     },
     user_id: {
       type: DataTypes.INTEGER,
@@ -61,6 +62,7 @@ Post.init(
       }
     }
   },
+  // async function fokr log in
   {
     sequelize,
     freezeTableName: true,

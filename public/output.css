@@ -45,6 +45,7 @@ html {
 body {
   margin: 0; /* 1 */
   line-height: inherit; /* 2 */
+  background: linear-gradient(to right, rgb(139, 162, 139), rgb(214, 118, 118));
 }
 
 /*
